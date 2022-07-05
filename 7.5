@@ -1,0 +1,14 @@
+C++ primer 读取数量不定的输入数据：
+#include<iostream>
+Int main()
+{
+Int sum = 0, value = 0;
+//读取数据直到遇到文件尾，计算所有输入的值的和
+while ( std::cin >> value )
+Sum += value;
+std::cout << “Sum is : “ << sum << std::endl;
+return 0;
+}
+
+当我们使用一个istream对象作为条件时，其效果是检测流的状态。如果流是有效的，即流未遇到错误，那么检测成功。
+当遇到文件结束符 ( end-of-file )， 或遇到一个无效输入时 ( 例如输入的值不是一个整数 )，istream对象的状态会变为无效。处于无效状态的istream对象会使条件变假。
