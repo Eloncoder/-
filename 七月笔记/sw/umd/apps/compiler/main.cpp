@@ -27,7 +27,7 @@
  */
 
 #include "main.h"
-#include "ErrorMacros.h"
+#include "ErrorMacros.h"     // sw/umd/core/include/ErrorMacros.h
 
 #include "nvdla_os_inf.h"
 
