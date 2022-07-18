@@ -127,11 +127,11 @@ int main(int argc, char* argv[])
     bool inputPathSet = false;
     bool outputPathSet = false;
     bool testnameSet = false;
-    NVDLA_UNUSED(inputPathSet);
-    NVDLA_UNUSED(outputPathSet);
+    NVDLA_UNUSED(inputPathSet);      // #define NVDLA_UNUSED(expr) do { (void)(expr); } while (0)
+    NVDLA_UNUSED(outputPathSet); 
     NVDLA_UNUSED(testnameSet);
 
-    NvS32 ii = 1;
+    NvS32 ii = 1;          // typedef int32_t NvS32    sw/umd/core/include/dlatypes.h
     while(true)
     {
         if (ii >= argc)
