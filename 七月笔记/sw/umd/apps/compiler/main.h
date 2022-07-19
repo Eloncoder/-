@@ -26,8 +26,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "dlaerror.h"
-#include "dlatypes.h"
+#include "dlaerror.h"     // sw/umd/core/include/dlaerror.h
+#include "dlatypes.h"      // sw/umd/core/include/dlatypes.h
 
 #include "nvdla/ILoadable.h"
 #include "nvdla/IRuntime.h"
