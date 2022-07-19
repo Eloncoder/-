@@ -33,7 +33,7 @@
 #include "dlaerror.h"
 #include "dlatypes.h"
 
-#include "DlaImage.h"
+#include "DlaImage.h"      // class NvDlaImage
 
 NvDlaError PGM2DIMG(std::string inputfilename, NvDlaImage* output, nvdla::IRuntime::NvDlaTensor *tensorDesc);
 NvDlaError DIMG2Tiff(const NvDlaImage* input, std::string outputfilename);
