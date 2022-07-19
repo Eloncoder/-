@@ -45,20 +45,20 @@
 
 enum TestImageTypes
 {
-    IMAGE_TYPE_PGM = 0,
+    IMAGE_TYPE_PGM = 0,      // 便携式灰度图像格式(portable graymap file format)，在黑白超声图像系统中经常使用。文件的后缀名为".pgm"
     IMAGE_TYPE_JPG = 1,
     IMAGE_TYPE_UNKNOWN = 2,
 };
 
 struct TaskStatus
 {
-    NvU64 timestamp;
-    NvU32 status_engine;
-    NvU16 subframe;
-    NvU16 status_task;
+    NvU64 timestamp;      // 时间戳
+    NvU32 status_engine;    // 状态引擎
+    NvU16 subframe;       // 子帧
+    NvU16 status_task;     // 状态任务
 };
 
-struct SubmitContext
+struct SubmitContext        // 提交状况
 {
     NvU32 id;
     std::string inputName;
@@ -72,7 +72,7 @@ struct SubmitContext
     std::vector<void *> outputTaskStatus;
 };
 
-struct TestAppArgs
+struct TestAppArgs       // 测试参数
 {
     std::string project;
     std::string inputPath;
@@ -87,8 +87,8 @@ struct TestAppArgs
     std::string profileName; // ok here?
     std::string profileFile;
     std::string configtarget;
-    std::string calibTable;
-    nvdla::QuantizationMode quantizationMode;
+    std::string calibTable;      // 校准表
+    nvdla::QuantizationMode quantizationMode;     //量化模式
 
     NvU16 numBatches;
     nvdla::DataFormat inDataFormat;
@@ -97,7 +97,7 @@ struct TestAppArgs
     std::map<std::string, NvF32> tensorScales;
 };
 
-struct TestInfo
+struct TestInfo      // 测试信息
 {
     // common
     nvdla::IWisdom* wisdom;
