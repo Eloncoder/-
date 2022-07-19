@@ -29,7 +29,7 @@
 #include "main.h"
 #include "ErrorMacros.h"     // sw/umd/core/include/ErrorMacros.h
 
-#include "nvdla_os_inf.h"
+#include "nvdla_os_inf.h"     // sw/umd/core/include/nvdla_os_inf.h
 
 #include <algorithm>
 #include <cstring>
@@ -41,7 +41,7 @@
 #define DEFAULT_QUANT_MODE nvdla::QuantizationMode::NONE
 #define TARGET_CONFIG_NAME "nv_full"
 
-static TestAppArgs defaultTestAppArgs =
+static TestAppArgs defaultTestAppArgs =     // sw/umd/apps/main.h
 {
     /* .project = */ "OpenDLA",
     /* .inputPath = */ "./",
@@ -104,11 +104,11 @@ fail:
 NvDlaError launchTest(const TestAppArgs* appArgs)
 {
     NvDlaError e = NvDlaSuccess;
-    TestInfo testInfo;
+    TestInfo testInfo;    // sw/umd/apps/main.h
 
     PROPAGATE_ERROR_FAIL(testSetup(appArgs, &testInfo));
 
-    PROPAGATE_ERROR_FAIL(parseAndCompile(appArgs, &testInfo));
+    PROPAGATE_ERROR_FAIL(parseAndCompile(appArgs, &testInfo));    // 具体实现在 sw/umd/apps/compiler/ParseTest.cpp
 
     return NvDlaSuccess;
 
@@ -120,7 +120,7 @@ fail:
 int main(int argc, char* argv[])
 {
     NvDlaError e = NvDlaError_TestApplicationFailed;
-    TestAppArgs testAppArgs = defaultTestAppArgs;
+    TestAppArgs testAppArgs = defaultTestAppArgs;    
     bool showHelp = false;
     bool unknownArg = false;
     bool missingArg = false;
