@@ -66,7 +66,7 @@ NvDlaError testSetup(const TestAppArgs* appArgs, TestInfo* i)
 {
     NvDlaError e = NvDlaSuccess;
 
-    std::string wisdomPath = appArgs->outputPath + "wisdom.dir/";
+    std::string wisdomPath = appArgs->outputPath + "wisdom.dir/";     // sw/umd/out/apps/compiler/ncdla_compiler/wisdom.dir
     std::string removeCmd = "";
     std::string imagePath = "";
     NvDlaStatType stat;
@@ -106,7 +106,7 @@ NvDlaError launchTest(const TestAppArgs* appArgs)
     NvDlaError e = NvDlaSuccess;
     TestInfo testInfo;    // sw/umd/apps/main.h
 
-    PROPAGATE_ERROR_FAIL(testSetup(appArgs, &testInfo));
+    PROPAGATE_ERROR_FAIL(testSetup(appArgs, &testInfo));     // 传播 error fail
 
     PROPAGATE_ERROR_FAIL(parseAndCompile(appArgs, &testInfo));    // 具体实现在 sw/umd/apps/compiler/ParseTest.cpp
 
@@ -119,8 +119,8 @@ fail:
 // This is the entry point to the application
 int main(int argc, char* argv[])
 {
-    NvDlaError e = NvDlaError_TestApplicationFailed;
-    TestAppArgs testAppArgs = defaultTestAppArgs;    
+    NvDlaError e = NvDlaError_TestApplicationFailed;      // sw/umd/core/include/dlaerror.h  0x00000014
+    TestAppArgs testAppArgs = defaultTestAppArgs;      // 默认参数
     bool showHelp = false;
     bool unknownArg = false;
     bool missingArg = false;
@@ -335,7 +335,7 @@ int main(int argc, char* argv[])
                                            computePrecision == "int8" ? nvdla::DataType::INT8 :
                                                                         nvdla::DataType::UNKNOWN;
         }
-        else if (std::strcmp(arg, "--calibtable") == 0)
+        else if (std::strcmp(arg, "--calibtable") == 0)      // 可校准的  /network_resource/calibration_table/calibration_table_resnet50.json
         {
             if (ii+1 >= argc)
             {
