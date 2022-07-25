@@ -144,25 +144,25 @@ static NvDlaError parseCaffeNetwork(const TestAppArgs* appArgs, TestInfo* i)
     nvdla::INetwork* network = NULL;
 
     const nvdla::caffe::IBlobNameToTensor* b = NULL;
-    nvdla::caffe::ICaffeParser* parser = nvdla::caffe::createCaffeParser();
-    std::string caffePrototxtFile = appArgs->prototxt.c_str();
-    std::string caffeModelFile = appArgs->caffemodel.c_str();
+    nvdla::caffe::ICaffeParser* parser = nvdla::caffe::createCaffeParser();     // 创建Caffe解析器
+    std::string caffePrototxtFile = appArgs->prototxt.c_str();      // 创建Caffe原型文件
+    std::string caffeModelFile = appArgs->caffemodel.c_str();       // 创建Caffe模型文件
 
-    network = nvdla::createNetwork();
-    if (!network)
+    network = nvdla::createNetwork();       // 创建网络
+    if (!network)           // 创建网络失败
         ORIGINATE_ERROR_FAIL(NvDlaError_BadParameter, "createNetwork() failed");
 
     NvDlaDebugPrintf("parsing caffe network...\n");
-    b = parser->parse(caffePrototxtFile.c_str(), caffeModelFile.c_str(), network);
-    if (!b)
+    b = parser->parse(caffePrototxtFile.c_str(), caffeModelFile.c_str(), network);    // 将要解析的模型传进去
+    if (!b)              // 解析失败
         ORIGINATE_ERROR_FAIL(NvDlaError_BadParameter, "Unable to parse caffemodel: \"%s\"", caffePrototxtFile.c_str());
 
     // if the application has so far not marked the network's outputs, allow the parser to do so now
-    if (network->getNumOutputs() <= 0)
+    if (network->getNumOutputs() <= 0)      
     {
         int outs = parser->identifyOutputs(network);
-        NvDlaDebugPrintf("Marking total %d outputs\n", outs);
-        if (outs <= 0)
+        NvDlaDebugPrintf("Marking total %d outputs\n", outs);      // 标记总输出
+        if (outs <= 0)         // 无法识别网络输出
             ORIGINATE_ERROR_FAIL(NvDlaError_BadValue, "Unable to identify outputs for the network: %d", outs);
     }
 
@@ -207,7 +207,7 @@ NvDlaError parse(const TestAppArgs* appArgs, TestInfo* i)
         ORIGINATE_ERROR_FAIL(NvDlaError_BadParameter, "wisdom->open() failed to open: \"%s\"", i->wisdomPath.c_str());
 
     // Parse
-    if (isCaffe)
+    if (isCaffe)        // 判断是否是caffe模型
         PROPAGATE_ERROR_FAIL(parseCaffeNetwork(appArgs, i));
     else
         ORIGINATE_ERROR_FAIL(NvDlaError_BadParameter, "Unknown network type encountered");
@@ -229,7 +229,7 @@ fail:
 NvDlaError parseAndCompile(const TestAppArgs* appArgs, TestInfo* i)
 {
     NvDlaError e = NvDlaSuccess;
-    bool isCaffe = appArgs->caffemodel != "";     // 判断是否是caffe模型
+    bool isCaffe = appArgs->caffemodel != "";
 
     PROPAGATE_ERROR_FAIL(parseSetup(appArgs, i));
 
@@ -243,7 +243,7 @@ NvDlaError parseAndCompile(const TestAppArgs* appArgs, TestInfo* i)
         ORIGINATE_ERROR_FAIL(NvDlaError_BadParameter, "wisdom->open() failed to open: \"%s\"", i->wisdomPath.c_str());
 
     // Parse
-    if (isCaffe)
+    if (isCaffe)        // 判断是否是caffe模型
         PROPAGATE_ERROR_FAIL(parseCaffeNetwork(appArgs, i));
     else
         ORIGINATE_ERROR_FAIL(NvDlaError_BadParameter, "Unknown network type encountered");
