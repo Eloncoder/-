@@ -222,7 +222,7 @@ fail:
     if (i->wisdom != NULL) {
         nvdla::destroyWisdom(i->wisdom);
         i->wisdom = NULL;
-    }
+    }parseSetup
     return e;
 }
 
