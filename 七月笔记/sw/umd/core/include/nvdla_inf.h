@@ -56,6 +56,7 @@ typedef enum NvDlaHeap {           // 内存堆分配内存，NVDLA支持两种�
 extern "C" {
 #endif
 
+// 以下函数主要在：/port/linux/nvdla.c 和 /core/src/runtime/Runtime.cpp 中出现
 NvDlaError NvDlaInitialize(void **session_handle);
 void NvDlaDestroy(void *session_handle);
 
