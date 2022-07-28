@@ -158,7 +158,7 @@ NvDlaError releaseBuffers(const TestAppArgs* appArgs, TestInfo* i, SubmitContext
 NvDlaError runImages(const TestAppArgs* appArgs, TestInfo* i, SubmitContext* sc);
 
 // TestUtils
-NvDlaError allocateDlaBuffer(void ** handle, void **pData, NvU32 size, NvDlaHeap heap);
+NvDlaError allocateDlaBuffer(void ** handle, void **pData, NvU32 size, NvDlaHeap heap);    // NvDlaHeap：/core/include/nvdla_inf.h
 NvDlaError freeDlaBuffer(void * handle, void *pData);
 NvDlaError DIMG2DlaBuffer(const NvDlaImage* image, void ** phBuffer);
 NvDlaError DlaBuffer2DIMG(void * hBuffer, NvDlaImage* image);
