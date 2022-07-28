@@ -63,7 +63,7 @@ static TestAppArgs defaultTestAppArgs =     // sw/umd/apps/main.h
 };
 
 NvDlaError testSetup(const TestAppArgs* appArgs, TestInfo* i)
-{
+{   // 主要是检查输入输出文件路径有效性，删除前一次编译中间文件，新建新一次编译中间文件夹
     NvDlaError e = NvDlaSuccess;
 
     std::string wisdomPath = appArgs->outputPath + "wisdom.dir/";     // sw/umd/out/apps/compiler/ncdla_compiler/wisdom.dir
@@ -82,12 +82,13 @@ NvDlaError testSetup(const TestAppArgs* appArgs, TestInfo* i)
     if (e != NvDlaSuccess)
         ORIGINATE_ERROR_FAIL(NvDlaError_BadParameter, "Output path does not exist: \"%s\"", appArgs->outputPath.c_str());
 
-    // Clear wisdomPath if any exist
+    // Clear wisdomPath if any exist 删除整个wisdom文件夹
     removeCmd += "rm -rf " + wisdomPath;
     ii = std::system(removeCmd.c_str()); // This is pretty awful
     if (ii != 0)
         ORIGINATE_ERROR_FAIL(NvDlaError_BadParameter, "system command failed: \"%s\"", removeCmd.c_str());
 
+    // 建立wisdomdir
     PROPAGATE_ERROR_FAIL(NvDlaMkdir(const_cast<char *>(wisdomPath.c_str())));
 
     // Initialize TestInfo
