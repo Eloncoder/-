@@ -34,15 +34,15 @@
 
 #define NVDLA_MAX_BUFFERS_PER_TASK (6144)
 
-struct NvDlaMemDescRec{
+struct NvDlaMemDescRec{        // 内存描述符，它包括memory handle(内存句柄)和缓冲区大小。
     void *handle;
     NvU32 offset;
 };
 typedef struct NvDlaMemDescRec NvDlaMemDesc;
 
-struct NvDlaTaskRec {
-    NvU64 task_id;
-    NvU32 num_addresses;
+struct NvDlaTaskRec {           // DLA 任务结构
+    NvU64 task_id;              // 运行时驱动程序使用来自可加载的信息填充它
+    NvU32 num_addresses;        // 并被可移植层用于以实现定义的方式将推理任务提交给 KMD
     NvDlaMemDesc address_list[NVDLA_MAX_BUFFERS_PER_TASK];
 };
 typedef struct NvDlaTaskRec NvDlaTask;
