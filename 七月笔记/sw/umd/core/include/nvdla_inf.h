@@ -47,9 +47,9 @@ struct NvDlaTaskRec {
 };
 typedef struct NvDlaTaskRec NvDlaTask;
 
-typedef enum NvDlaHeap {
-    NvDlaHeap_System,
-    NvDlaHeap_SRAM,
+typedef enum NvDlaHeap {           // 内存堆分配内存，NVDLA支持两种内存接口。
+    NvDlaHeap_System,             // 通常这些接口连接到 DRAM（系统存储器）和内部 SRAM。
+    NvDlaHeap_SRAM,              // KMD 可以根据内存类型维护单独的堆进行分配。
 } NvDlaHeap;
 
 #ifdef __cplusplus
