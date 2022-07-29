@@ -45,7 +45,7 @@
 
 NvDlaError parseSetup(const TestAppArgs* appArgs, TestInfo* i)
 {
-    return NvDlaSuccess;
+    return NvDlaSuccess;         // 直接返回成功
 }
 
 NvDlaError parseTensorScales(const TestAppArgs* appArgs, TestInfo *i, nvdla::INetwork* network)
@@ -145,10 +145,10 @@ static NvDlaError parseCaffeNetwork(const TestAppArgs* appArgs, TestInfo* i)
 
     const nvdla::caffe::IBlobNameToTensor* b = NULL;
     nvdla::caffe::ICaffeParser* parser = nvdla::caffe::createCaffeParser();     // 创建Caffe解析器
-    std::string caffePrototxtFile = appArgs->prototxt.c_str();      // 创建Caffe原型文件
-    std::string caffeModelFile = appArgs->caffemodel.c_str();       // 创建Caffe模型文件
+    std::string caffePrototxtFile = appArgs->prototxt.c_str();      // 创建Caffe模型的prototxt文件
+    std::string caffeModelFile = appArgs->caffemodel.c_str();       // 创建Caffe模型的caffemodel文件，blob格式
 
-    network = nvdla::createNetwork();       // 创建网络
+    network = nvdla::createNetwork();       // 创建网络的内存表示
     if (!network)           // 创建网络失败
         ORIGINATE_ERROR_FAIL(NvDlaError_BadParameter, "createNetwork() failed");
 
@@ -190,7 +190,7 @@ fail:
     return e;
 }
 
-NvDlaError parse(const TestAppArgs* appArgs, TestInfo* i)
+NvDlaError parse(const TestAppArgs* appArgs, TestInfo* i)     // 对于caffemodel的具体解析
 {
     NvDlaError e = NvDlaSuccess;
     bool isCaffe = appArgs->caffemodel != "";
@@ -231,18 +231,18 @@ NvDlaError parseAndCompile(const TestAppArgs* appArgs, TestInfo* i)
     NvDlaError e = NvDlaSuccess;
     bool isCaffe = appArgs->caffemodel != "";
 
-    PROPAGATE_ERROR_FAIL(parseSetup(appArgs, i));
+    PROPAGATE_ERROR_FAIL(parseSetup(appArgs, i));     // 直接返回成功
 
     NvDlaDebugPrintf("creating new wisdom context...\n");
-    i->wisdom = nvdla::createWisdom();
-    if (!i->wisdom)
+    i->wisdom = nvdla::createWisdom();         // 建立编译环境
+    if (!i->wisdom)               // 创建失败
         ORIGINATE_ERROR_FAIL(NvDlaError_BadParameter, "createWisdom() failed");
 
     NvDlaDebugPrintf("opening wisdom context...\n");
-    if (!i->wisdom->open(i->wisdomPath))
+    if (!i->wisdom->open(i->wisdomPath))          // 编译环境打开失败
         ORIGINATE_ERROR_FAIL(NvDlaError_BadParameter, "wisdom->open() failed to open: \"%s\"", i->wisdomPath.c_str());
 
-    // Parse
+    // Parse 解析prototxt(定义网络的结构和参数)和caffemodel(训练好的网络的权重和偏移量参数值)文件
     if (isCaffe)        // 判断是否是caffe模型
         PROPAGATE_ERROR_FAIL(parseCaffeNetwork(appArgs, i));
     else
@@ -251,7 +251,7 @@ NvDlaError parseAndCompile(const TestAppArgs* appArgs, TestInfo* i)
     // Compile
     PROPAGATE_ERROR_FAIL(compileProfile(appArgs, i));
 
-    /* Destroy network before closing wisdom context */
+    /* Destroy network before closing wisdom context 释放network内存数据结构 */
     nvdla::destroyNetwork(i->wisdom->getNetwork());
 
     NvDlaDebugPrintf("closing wisdom context...\n");
@@ -259,7 +259,7 @@ NvDlaError parseAndCompile(const TestAppArgs* appArgs, TestInfo* i)
 
 fail:
     if (i->wisdom != NULL) {
-        nvdla::destroyWisdom(i->wisdom);
+        nvdla::destroyWisdom(i->wisdom);     // 释放wisdom数据结构
         i->wisdom = NULL;
     }
     return e;
