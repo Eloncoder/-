@@ -76,12 +76,12 @@ void NvDlaUtilsLogError(const char* tag, const char* path, NvDlaError e, const c
 /**
  * Argument counting macros.
  */
-#define NVDLA_UTILS_CAT(A, B) A##B
-#define NVDLA_UTILS_SELECT(NAME, NUM) NVDLA_UTILS_CAT(NAME##_, NUM)
-#define NVDLA_UTILS_GET_COUNT(_1, _2, _3, _4, _5, COUNT, ...) COUNT
+#define NVDLA_UTILS_CAT(A, B) A##B     // ## 连接A和B A B -> AB
+#define NVDLA_UTILS_SELECT(NAME, NUM) NVDLA_UTILS_CAT(NAME##_, NUM)      // NAME NUM -> NAME_NUM
+#define NVDLA_UTILS_GET_COUNT(_1, _2, _3, _4, _5, COUNT, ...) COUNT      // ???
 #define NVDLA_UTILS_VA_SIZE(...) NVDLA_UTILS_GET_COUNT(__VA_ARGS__, 5, 4, 3, 2, 1)
-#define NVDLA_UTILS_VA_SELECT(NAME, ...) NVDLA_UTILS_SELECT(NAME, NVDLA_UTILS_VA_SIZE(__VA_ARGS__))(__VA_ARGS__)
-
+#define NVDLA_UTILS_VA_SELECT(NAME, ...) NVDLA_UTILS_SELECT(NAME, NVDLA_UTILS_VA_SIZE(__VA_ARGS__))(__VA_ARGS__)     //
+                                                           // NAME ... -> NAME_ ???
 /**
  * Simply report an error.
  */
@@ -185,7 +185,7 @@ void NvDlaUtilsLogError(const char* tag, const char* path, NvDlaError e, const c
  * Calls another function, and if an error was returned it is reported before jumping to the
  * "fail:" label. The variable "NvError e" must have been previously declared.
  */
-#define PROPAGATE_ERROR_FAIL(...) NVDLA_UTILS_VA_SELECT(PROPAGATE_ERROR_FAIL_IMPL, __VA_ARGS__)
+#define PROPAGATE_ERROR_FAIL(...) NVDLA_UTILS_VA_SELECT(PROPAGATE_ERROR_FAIL_IMPL, __VA_ARGS__)   // 83行
 #define PROPAGATE_ERROR_FAIL_IMPL_1(_err) \
     do { \
         e = (_err); \
