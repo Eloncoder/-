@@ -239,7 +239,7 @@ NvDlaError parseAndCompile(const TestAppArgs* appArgs, TestInfo* i)
         ORIGINATE_ERROR_FAIL(NvDlaError_BadParameter, "createWisdom() failed");
 
     NvDlaDebugPrintf("opening wisdom context...\n");
-    if (!i->wisdom->open(i->wisdomPath))          // 编译环境打开失败
+    if (!i->wisdom->open(i->wisdomPath))          // 编译环境打开失败  umd/core/src/compiler/Wisdom.cpp
         ORIGINATE_ERROR_FAIL(NvDlaError_BadParameter, "wisdom->open() failed to open: \"%s\"", i->wisdomPath.c_str());
 
     // Parse 解析prototxt(定义网络的结构和参数)和caffemodel(训练好的网络的权重和偏移量参数值)文件
