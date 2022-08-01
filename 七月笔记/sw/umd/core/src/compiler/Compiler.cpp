@@ -479,6 +479,10 @@ NvDlaError Compiler::compileInternal(Profile *profile, TargetConfig *target_conf
         gLogInfo << "\tquantization mode " << profile->quantizationMode().c_str() << endl;
     }
 
+    // canonical_ast::generateGraph()函数功能是caffe模型到内部graph的变换
+    // engine_ast::generateGraph()函数功能是内部graph到适配DPU的op的内部graph变换
+    // emit()函数功能是后端代码的生成
+    // 其余函数主要执行graph的各种变换与优化
     can_g = canonical_ast::generateGraph(net);
     if ( !can_g )
     {
