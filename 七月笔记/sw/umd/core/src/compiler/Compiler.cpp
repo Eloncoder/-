@@ -377,6 +377,9 @@ fail:
     return e;
 }
 
+// 第一层compileInternal()函数，接收compiler函数传递过来的profile_name和target_config_name字符串
+// 把这两个参数转换成profile对象和target_config对象，便于下层compileInternal()函数使用
+// 两个数据结构：Profile，TargetConfig  sw/umd/core/src/compiler/include/priv/Profile.h TargetConfig.h
 NvDlaError Compiler::compileInternal(const char *tp_name, const char *target_config_name, ILoadable **peli, bool fullCompile)
 {
     NvDlaError e = NvDlaSuccess;
@@ -409,19 +412,21 @@ NvDlaError Compiler::compileInternal(const char *tp_name, const char *target_con
         ORIGINATE_ERROR_FAIL(NvDlaError_BadParameter, "No profiler available.");
     }
 
+    // 将tp_name字符串参数转换成profile对象
     profile = ProfileFactory::priv(profiler->getProfile(tp_name));
     if ( !profile )
     {
         ORIGINATE_ERROR_FAIL(NvDlaError_BadParameter, "Couldn't find profile to compile.");
     }
 
+    // 将target_config_name字符串参数转换成target_config对象
     target_config = TargetConfigFactory::priv(profiler->getTargetConfig(target_config_name));
     if ( !target_config )
     {
         ORIGINATE_ERROR_FAIL(NvDlaError_BadParameter, "Couldn't find target config to compile.");
     }
 
-
+    // 调用重载的compileInternal()执行下一步编译，这里参数已经是profile和target_config对象
     PROPAGATE_ERROR_FAIL( compileInternal(profile, target_config, peli, fullCompile) );
 fail:
     return e;
