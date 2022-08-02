@@ -26,6 +26,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// 此文件是caffe模型的解析器，其功能是调用dicaffe文件夹下的文件完成的
 #include <math.h>
 #include <iostream>
 #include <sstream>
