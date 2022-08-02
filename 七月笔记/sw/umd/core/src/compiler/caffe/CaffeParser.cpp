@@ -876,6 +876,7 @@ typedef ILayer*(*LayerParseFn)(INetwork *,
 
 typedef std::map<std::string, LayerParseFn> LayerParseFnMap;
 
+// 用到gParseTable这个层解析函数表，表格中存放的是从caffe模型中读取的各个层的对应解析函数表：
 LayerParseFnMap::value_type gParseTableData[] =
     {
         LayerParseFnMap::value_type("Convolution", parseConvolution),
@@ -896,7 +897,9 @@ LayerParseFnMap::value_type gParseTableData[] =
     };
 const int nelems = sizeof gParseTableData / sizeof gParseTableData[0];
 LayerParseFnMap gParseTable( gParseTableData, gParseTableData + nelems);
-
+// 可以看到，对应caffe模型中的每一种layer，都有相应的解析函数，
+// 这些解析函数的功能都类似，负责解析一个layer，然后调用network提供的API，自动构造一个network网络内存模型。
+// 整个caffe模型到network内存表示的解析比较复杂，其中用到了google开源的protobuf库，实现在CaffePaser.cpp文件当中。
 
 
 
@@ -928,6 +931,10 @@ const IBlobNameToTensor* CaffeParser::parse(const char* deployFile,
     network->setPoolingOutputDimensionsFormula(mDimsCallback);
 
     // this is used to deal with dropout layers which have different input and output
+    
+    // 调用readBinaryProto()函数解析modelFile文件，返回到NetParameter类型的mModel变量当中
+    // modelFile=lenet_iter_10000.caffemodel
+    // ditcaffe::NetParameter * mModel，这个NetParameter数据结构是从ditcaffe.proto自动生成的
     mModel = new dc::NetParameter();
     if (!readBinaryProto(mModel/*.get()*/, modelFile, mProtobufBufferSize))
     {
@@ -943,11 +950,13 @@ const IBlobNameToTensor* CaffeParser::parse(const char* deployFile,
     }
 
     bool ok = true;
+    // 提取mModel中的weight数据，放到weights变量中，后面调用每层解析函数时作为参数传递进去
     CaffeWeightFactory weights(*mModel/**mModel.get()*/,
                                false /*weightType == DataType::kHALF*/, mTmpAllocs);
-
+    // mBlobNameToTensor变量维护一个blob文件中weight数据到ITensor*的映射关系
     mBlobNameToTensor = new BlobNameToTensor();
 
+    // input blob只在prototxt文件当中，所以这里以mDeploy为基础给network增加inputTensor
     for (int i = 0; i < mDeploy->input_size(); i++)
     {
         Dims4 dims;
@@ -963,26 +972,31 @@ const IBlobNameToTensor* CaffeParser::parse(const char* deployFile,
             dims.h = (int)mDeploy->input_dim().Get(i * 4 + 2);
             dims.w = (int)mDeploy->input_dim().Get(i * 4 + 3);
         }
-
+        // 调用network的API增加network的一个InputTensor
+        // 这里加入一个tensor只需要指定tensor的name和dims即可
         ITensor* tensor = network->addInput(mDeploy->input().Get(0).c_str(), dims);
+        // 建立network中新增InputTensor到blob文件中相应区域的name的cstring映射
         mBlobNameToTensor->add(mDeploy->input().Get(0), tensor);
 
     }
 
+    // 前面通过readBinaryProto()函数和readTextProto()函数把caffe模型的信息和weight等解析到NetParameter
+  	// 类型的变量mModel和mDeploy，这里通过对layer的迭代，通过NetParameter里的LayerParameter进行解析
+    // 逐步建立network的内存中间表示
     for (int i = 0; i < mDeploy->layer_size() && ok; i++)
     {
         const dc::LayerParameter& layerMsg = mDeploy->layer(i);
         if (layerMsg.has_phase() && layerMsg.phase() == dc::TEST) {
             continue;
         }
-
+        // Dropout层处理
         if (layerMsg.type() == "Dropout")
         {
             mBlobNameToTensor->add(layerMsg.top().Get(0),
                                    mBlobNameToTensor->find(layerMsg.bottom().Get(0).c_str()));
             continue;
         }
-
+        // Input层处理
         if (layerMsg.type() == "Input")
         {
             const dc::InputParameter& p = layerMsg.input_param();
@@ -990,11 +1004,13 @@ const IBlobNameToTensor* CaffeParser::parse(const char* deployFile,
             {
                 const dc::BlobShape& shape = p.shape().Get(i);
                 Dims4 dims(shape.dim().Get(0), shape.dim().Get(1), shape.dim().Get(2), shape.dim().Get(3));
+                // 调用network的API，增加Input层
                 ITensor* tensor = network->addInput(layerMsg.top(i).c_str(), dims);
                 mBlobNameToTensor->add(layerMsg.top().Get(i), tensor);
             }
             continue;
         }
+        // Flatten层处理
         if (layerMsg.type() == "Flatten")
         {
             ITensor* tensor = (*mBlobNameToTensor)[layerMsg.bottom().Get(0)];
@@ -1003,6 +1019,7 @@ const IBlobNameToTensor* CaffeParser::parse(const char* deployFile,
             continue;
         }
 
+        // 根据layerMsg.type()信息在gParseTable中找到相应的layer层解析函数
         LayerParseFnMap::iterator v = gParseTable.find(layerMsg.type());
 
         if (v == gParseTable.end())
@@ -1012,6 +1029,8 @@ const IBlobNameToTensor* CaffeParser::parse(const char* deployFile,
         }
         else
         {
+            // 如果找到相应的layer层解析函数，则直接调用相应的解析函数对层进行解析？
+            // weights变量包含了所有层的weight数据，解析层的时候可以用上
             ILayer* layer = (*v->second)(network, layerMsg, weights, mBlobNameToTensor);
 
             if (layer == 0)
@@ -1027,7 +1046,7 @@ const IBlobNameToTensor* CaffeParser::parse(const char* deployFile,
             }
         }
     }
-
+    // 为表格中每个tensor设定name，其实就是把tensor的name设定成blobname
     mBlobNameToTensor->setTensorNames();
     return ok && weights.isOK() ? mBlobNameToTensor : 0;
 }
