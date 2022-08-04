@@ -66,7 +66,7 @@ NvDlaError testSetup(const TestAppArgs* appArgs, TestInfo* i)
 {   // 主要是检查输入输出文件路径有效性，删除前一次编译中间文件，新建新一次编译中间文件夹
     NvDlaError e = NvDlaSuccess;
 
-    std::string wisdomPath = appArgs->outputPath + "wisdom.dir/";     // sw/umd/out/apps/compiler/ncdla_compiler/wisdom.dir
+    std::string wisdomPath = appArgs->outputPath + "wisdom.dir/";     // sw/umd/out/apps/compiler/nvdla_compiler/wisdom.dir
     std::string removeCmd = "";
     std::string imagePath = "";
     NvDlaStatType stat;
