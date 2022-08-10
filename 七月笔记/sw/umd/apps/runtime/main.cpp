@@ -217,8 +217,8 @@ int main(int argc, char* argv[])    // main()函数是用户应用程序的入�
         NvDlaDebugPrintf("    -h                    print this help message\n");
         NvDlaDebugPrintf("    -s                    launch test in server mode\n");    // 在服务器模式下启动测试
         NvDlaDebugPrintf("    --image <file>        input jpg/pgm file\n");
-        NvDlaDebugPrintf("    --normalize <value>   normalize value for input image\n");
-        NvDlaDebugPrintf("    --mean <value>        comma separated mean value for input image\n");
+        NvDlaDebugPrintf("    --normalize <value>   normalize value for input image\n");     // 归一化输入图像的值
+        NvDlaDebugPrintf("    --mean <value>        comma separated mean value for input image\n");   // 输入图像的逗号分隔平均值
         NvDlaDebugPrintf("    --rawdump             dump raw dimg data\n");     // 转储原始 dimg 数据
 
         if (unknownArg || missingArg)
