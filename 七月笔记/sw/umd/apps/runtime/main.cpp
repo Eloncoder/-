@@ -94,7 +94,7 @@ fail:
 int main(int argc, char* argv[])    // main()函数是用户应用程序的入口，也是nvdla_runtime执行的开始
 {
     NvDlaError e = NvDlaError_TestApplicationFailed;
-    TestAppArgs testAppArgs = defaultTestAppArgs;
+    TestAppArgs testAppArgs = defaultTestAppArgs;    // 先将测试参数设置为默认
     bool showHelp = false;
     bool unknownArg = false;
     bool missingArg = false;
@@ -102,7 +102,7 @@ int main(int argc, char* argv[])    // main()函数是用户应用程序的入�
     bool serverMode = false;
     NVDLA_UNUSED(inputPathSet);
 
-    NvS32 ii = 1;
+    NvS32 ii = 1;    // 参数下标
     while(true)
     {
         if (ii >= argc)
