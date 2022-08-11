@@ -49,7 +49,7 @@ struct TestAppArgs
     float mean[4];
     bool rawOutputDump;
 
-    TestAppArgs() :
+    TestAppArgs() :        // 构造函数初始化列表
         inputPath("./"),
         inputName(""),
         loadableName(""),
@@ -62,7 +62,7 @@ struct TestAppArgs
 
 struct TestInfo
 {
-    TestInfo() :
+    TestInfo() :        // 构造函数初始化列表
         runtime(NULL),
         inputLoadablePath(""),
         inputHandle(NULL),
