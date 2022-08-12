@@ -12,3 +12,7 @@ using std::string;
 ![1660306046839](https://user-images.githubusercontent.com/63440757/184350765-3fedb915-f4c5-42cd-97e3-fbd32709c03c.png)
 
 连续读入
+
+![1660307058986](https://user-images.githubusercontent.com/63440757/184353385-e7dab5f5-5ee5-47b9-bcbb-000442a604fe.png)
+
+按行输入输出
