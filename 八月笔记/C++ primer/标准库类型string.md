@@ -27,3 +27,11 @@ using std::string;
 ![b7b1397cf363830ed3278695ba469c8](https://user-images.githubusercontent.com/63440757/184528211-22062e58-3c70-442d-bf89-a0d14c234e4d.png)
 
 string::size_type类型，但是typeid为m，unsigned long？
+
+![97229fa806e4ca9e8efa37e65254cf8](https://user-images.githubusercontent.com/63440757/184528917-14a43a05-7322-494c-a94a-716b1f00105b.jpg)
+
+![a7ccf56beb135aa47d8415db9b34c78](https://user-images.githubusercontent.com/63440757/184528892-9964c8b7-9056-4559-a0a5-a5882f4ca947.png)
+
+![29db7487751e171bafaa379f8ac3058](https://user-images.githubusercontent.com/63440757/184528902-f01fef24-64cd-4cff-9922-7bea3b3baba3.png)
+
+这里面应该是s1和"654"先结合，形成string类临时变量，然后再和"321"结合
