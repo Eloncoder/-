@@ -27,7 +27,7 @@ message BlobShape {
 // Blob数据块，包括Blob shape，数据和微分
 message BlobProto {
   // Blob的shape, 即numpy中的shape
-  optional BlobShape shape = 7;                                   // 123456789？？
+  optional BlobShape shape = 7;
   // Blob的数据部分
   repeated float data = 5 [packed = true];
   // Blob的微分部分
